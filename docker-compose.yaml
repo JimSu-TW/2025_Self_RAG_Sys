@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - sqlite_data:/app/data  # SQLite 資料庫持久化
+    networks:
+      - rag_network
+    env_file:
+      - .env  # 讓 backend 讀取 .env 內的 OLLAMA_URL 和 DATABASE_PATH
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8501:8501"
+    networks:
+      - rag_network
+    depends_on:
+      - backend
+
+volumes:
+  sqlite_data:
+
+networks:
+  rag_network:
