@@ -1,0 +1,21 @@
+# 使用 Python 3.13 作為基礎鏡像
+FROM python:3.13-slim
+
+WORKDIR /app
+
+# 複製需求文件並安裝相依套件
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 複製後端應用程式
+COPY . .
+
+# 確保 SQLite 資料庫存放目錄存在
+RUN mkdir -p /app/data
+VOLUME ["/app/data"]
+
+# 暴露 FastAPI 預設端口
+EXPOSE 8000
+
+# 啟動 FastAPI 服務
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

@@ -1,0 +1,17 @@
+# 使用 Python 3.13 作為基礎鏡像
+FROM python:3.13-slim
+
+WORKDIR /app
+
+# 複製需求文件並安裝相依套件
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 複製前端應用程式
+COPY . .
+
+# 暴露 Streamlit 預設端口
+EXPOSE 8501
+
+# 啟動 Streamlit 應用
+CMD ["streamlit", "run", "homepage.py", "--server.port=8501", "--server.address=0.0.0.0"]
